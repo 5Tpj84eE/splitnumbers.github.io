@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Splitter</title>
+    <!-- Material Design Lite CSS -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Material Design Lite JavaScript -->
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #d3d3d3;
+            color: #212121;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            position: relative;
+        }
+        /* Main number and sub numbers */
+        .number-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #000;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            font-size: 2em;
+            position: relative;
+            background-color: #fff;
+            z-index: 2;
+            border-radius: 8px; /* Add rounded corners */
+        }
+        .number-container {
+            display: flex;
+            justify-content: space-between;
+            width: 240px;
+        }
+        /* Connect lines */
+        .line {
+            position: absolute;
+            width: 2px;
+            background-color: #000;
+            z-index: 1;
+        }
+        /* Line from main number to left */
+        .line-left {
+            top: 150px;
+            left: calc(50% - 80px);
+            height: 70px;
+            transform: rotate(-45deg);
+        }
+        /* Line from main number to right */
+        .line-right {
+            top: 150px;
+            right: calc(50% - 80px);
+            height: 70px;
+            transform: rotate(45deg);
+        }
+        /* Button and Table Layout */
+        .button-container {
+            margin-top: 20px;
+        }
+        .combination-table {
+            margin-top: 30px;
+            text-align: center; /* Center align the table */
+            width: 100%;
+        }
+        .combination-table table {
+            margin: 0 auto; /* Center the table itself */
+        }
+        .combination-table th, .combination-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Number Display Section -->
+    <div class="number-box" id="main-number">5</div>
+    <div class="number-container">
+        <div class="number-box" id="left-number">3</div>
+        <div class="number-box" id="right-number">2</div>
+    </div>
+
+    <!-- CSS to create connecting lines -->
+    <div class="line line-left"></div>
+    <div class="line line-right"></div>
+
+    <!-- Button Section -->
+    <div class="button-container">
+        <button id="randomize-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            あたらしいすうじ
+        </button>
+    </div>
+
+    <!-- Combination Table -->
+    <div class="combination-table">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <thead>
+                <tr>
+                    <th>すうじ</th>
+                    <th>いくつといくつ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>5</td><td>1+4, 2+3, 3+2, 4+1</td></tr>
+                <tr><td>6</td><td>1+5, 2+4, 3+3, 4+2, 5+1</td></tr>
+                <tr><td>7</td><td>1+6, 2+5, 3+4, 4+3, 5+2, 6+1</td></tr>
+                <tr><td>8</td><td>1+7, 2+6, 3+5, 4+4, 5+3, 6+2, 7+1</td></tr>
+                <tr><td>9</td><td>1+8, 2+7, 3+6, 4+5, 5+4, 6+3, 7+2, 8+1</td></tr>
+                <tr><td>10</td><td>1+9, 2+8, 3+7, 4+6, 5+5, 6+4, 7+3, 8+2, 9+1</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+    // Function to randomly select numbers from 5 to 10
+    document.getElementById('randomize-btn').addEventListener('click', function() {
+        const mainNum = Math.floor(Math.random() * 6) + 5;  // Random number between 5 and 10
+        let leftNum = Math.floor(Math.random() * (mainNum - 1)) + 1;
+        let rightNum = mainNum - leftNum;
+
+        // Update the displayed numbers
+        document.getElementById('main-number').textContent = mainNum;
+        document.getElementById('left-number').textContent = leftNum;
+        document.getElementById('right-number').textContent = rightNum;
+    });
+</script>
+
+</body>
+</html>

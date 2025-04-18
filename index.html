@@ -23,13 +23,11 @@
             margin-top: 50px;
             position: relative;
         }
-        /* Main number and sub numbers */
         .number-box {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 1px solid #000;
             width: 100px;
             height: 100px;
             margin: 10px;
@@ -37,49 +35,60 @@
             position: relative;
             background-color: #fff;
             z-index: 2;
-            border-radius: 8px; /* Add rounded corners */
+            border-radius: 8px;
         }
         .number-container {
             display: flex;
             justify-content: space-between;
             width: 240px;
         }
-        /* Connect lines */
         .line {
             position: absolute;
             width: 2px;
             background-color: #000;
             z-index: 1;
         }
-        /* Line from main number to left */
         .line-left {
             top: 150px;
             left: calc(50% - 80px);
             height: 70px;
             transform: rotate(-45deg);
         }
-        /* Line from main number to right */
         .line-right {
             top: 150px;
             right: calc(50% - 80px);
             height: 70px;
             transform: rotate(45deg);
         }
-        /* Button and Table Layout */
         .button-container {
             margin-top: 20px;
+            text-align: center;
         }
         .combination-table {
             margin-top: 30px;
-            text-align: center; /* Center align the table */
+            text-align: center;
             width: 100%;
         }
         .combination-table table {
-            margin: 0 auto; /* Center the table itself */
+            margin: 0 auto;
         }
         .combination-table th, .combination-table td {
             padding: 8px;
             border-bottom: 1px solid #ccc;
+        }
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background-color: #B0BEC5;
+            border-radius: 8px;
+            z-index: 3;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -90,7 +99,10 @@
     <div class="number-box" id="main-number">5</div>
     <div class="number-container">
         <div class="number-box" id="left-number">3</div>
-        <div class="number-box" id="right-number">2</div>
+        <div class="number-box" id="right-number-container">
+            <span id="right-number">2</span>
+            <div class="cover" id="right-cover"></div>
+        </div>
     </div>
 
     <!-- CSS to create connecting lines -->
@@ -102,10 +114,15 @@
         <button id="randomize-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
             あたらしいすうじ
         </button>
+        <br />
+        <br />
+        <button id="toggle-table-btn" class="mdl-button mdl-js-button mdl-button--raised">
+            一覧表
+        </button>
     </div>
 
     <!-- Combination Table -->
-    <div class="combination-table">
+    <div class="combination-table hidden" id="combination-table">
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
             <thead>
                 <tr>
@@ -127,16 +144,25 @@
 
 <!-- JavaScript Section -->
 <script>
-    // Function to randomly select numbers from 5 to 10
     document.getElementById('randomize-btn').addEventListener('click', function() {
-        const mainNum = Math.floor(Math.random() * 6) + 5;  // Random number between 5 and 10
+        const mainNum = Math.floor(Math.random() * 6) + 5;
         let leftNum = Math.floor(Math.random() * (mainNum - 1)) + 1;
         let rightNum = mainNum - leftNum;
 
-        // Update the displayed numbers
         document.getElementById('main-number').textContent = mainNum;
         document.getElementById('left-number').textContent = leftNum;
         document.getElementById('right-number').textContent = rightNum;
+
+        document.getElementById('right-cover').classList.remove('hidden');
+    });
+
+    document.getElementById('right-cover').addEventListener('click', function() {
+        this.classList.add('hidden');
+    });
+
+    document.getElementById('toggle-table-btn').addEventListener('click', function() {
+        const table = document.getElementById('combination-table');
+        table.classList.toggle('hidden');
     });
 </script>
 

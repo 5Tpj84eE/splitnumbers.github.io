@@ -1,172 +1,149 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>いくつといくつ</title>
-    <!-- Material Design Lite CSS -->
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <!-- Material Design Lite JavaScript -->
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <!-- Custom Styles -->
-    <style>
-        body {
-            background-color: #d3d3d3;
-            color: #212121;
-            font-family: 'Roboto', sans-serif;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 50px;
-            position: relative;
-        }
-        .number-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100px;
-            height: 100px;
-            margin: 10px;
-            font-size: 2em;
-            position: relative;
-            background-color: #fff;
-            z-index: 2;
-            border-radius: 8px;
-        }
-        .number-container {
-            display: flex;
-            justify-content: space-between;
-            width: 240px;
-        }
-        .line {
-            position: absolute;
-            width: 2px;
-            background-color: #000;
-            z-index: 1;
-        }
-        .line-left {
-            top: 150px;
-            left: calc(50% - 80px);
-            height: 70px;
-            transform: rotate(-45deg);
-        }
-        .line-right {
-            top: 150px;
-            right: calc(50% - 80px);
-            height: 70px;
-            transform: rotate(45deg);
-        }
-        .button-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .combination-table {
-            margin-top: 30px;
-            text-align: center;
-            width: 100%;
-        }
-        .combination-table table {
-            margin: 0 auto;
-        }
-        .combination-table th, .combination-table td {
-            padding: 8px;
-            border-bottom: 1px solid #ccc;
-        }
-        .cover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100px;
-            height: 100px;
-            background-color: #B0BEC5;
-            border-radius: 8px;
-            z-index: 3;
-            cursor: pointer;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>いくつといくつ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: #d3d3d3;
+      font-family: sans-serif;
+
+      /* 画面中央揃え */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    /* 全体 */
+    .split-area {
+      position: relative;
+      width: 260px;
+    }
+
+    /* 数字の箱 */
+    .number-box {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border-radius: 12px;
+
+      font-size: 48px;
+      font-weight: bold;
+      color: #263238;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 上の数字 */
+    .top {
+      margin: 0 auto;
+    }
+
+    /* 下の2つ */
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 60px;
+    }
+
+    /* 右の隠しマス（？なし） */
+    .hidden-box {
+      background: #b0bec5;
+      cursor: pointer;
+    }
+
+    /* 分岐線 */
+    .branch-line {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      width: 2px;
+      height: 80px;
+      background: #666;
+      transform-origin: top;
+      z-index: 1;
+    }
+
+    .branch-line.left {
+      transform: translateX(-1px) rotate(-30deg);
+    }
+
+    .branch-line.right {
+      transform: translateX(-1px) rotate(30deg);
+    }
+
+    /* ボタン */
+    button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+
+      background: #3f51b5;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Number Display Section -->
-    <div class="number-box" id="main-number">5</div>
-    <div class="number-container">
-        <div class="number-box" id="left-number">3</div>
-        <div class="number-box" id="right-number-container">
-            <span id="right-number">2</span>
-            <div class="cover" id="right-cover"></div>
-        </div>
+  <div class="split-area">
+    <!-- 上の数字 -->
+    <div class="number-box top" id="main"></div>
+
+    <!-- 分岐線 -->
+    <div class="branch-line left"></div>
+    <div class="branch-line right"></div>
+
+    <!-- 下の数字 -->
+    <div class="bottom-row">
+      <div class="number-box" id="left"></div>
+      <div class="number-box hidden-box" id="right"></div>
     </div>
+  </div>
 
-    <!-- CSS to create connecting lines -->
-    <div class="line line-left"></div>
-    <div class="line line-right"></div>
+  <button id="new">もういっかい</button>
 
-    <!-- Button Section -->
-    <div class="button-container">
-        <button id="randomize-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-            あたらしいすうじ
-        </button>
-        <br />
-        <br />
-        <button id="toggle-table-btn" class="mdl-button mdl-js-button mdl-button--raised">
-            一覧表
-        </button>
-    </div>
+  <script>
+    const main = document.getElementById("main");
+    const left = document.getElementById("left");
+    const right = document.getElementById("right");
+    const btn = document.getElementById("new");
 
-    <!-- Combination Table -->
-    <div class="combination-table hidden" id="combination-table">
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-            <thead>
-                <tr>
-                    <th>すうじ</th>
-                    <th>いくつといくつ</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>3</td><td>1+2, 2+1</td></tr>
-                <tr><td>4</td><td>1+3, 2+2, 3+1</td></tr>
-                <tr><td>5</td><td>1+4, 2+3, 3+2, 4+1</td></tr>
-                <tr><td>6</td><td>1+5, 2+4, 3+3, 4+2, 5+1</td></tr>
-                <tr><td>7</td><td>1+6, 2+5, 3+4, 4+3, 5+2, 6+1</td></tr>
-                <tr><td>8</td><td>1+7, 2+6, 3+5, 4+4, 5+3, 6+2, 7+1</td></tr>
-                <tr><td>9</td><td>1+8, 2+7, 3+6, 4+5, 5+4, 6+3, 7+2, 8+1</td></tr>
-                <tr><td>10</td><td>1+9, 2+8, 3+7, 4+6, 5+5, 6+4, 7+3, 8+2, 9+1</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+    function newQuiz() {
+      const total = Math.floor(Math.random() * 8) + 3; // 3〜10
+      const a = Math.floor(Math.random() * (total - 1)) + 1;
+      const b = total - a;
 
-<!-- JavaScript Section -->
-<script>
-    document.getElementById('randomize-btn').addEventListener('click', function() {
-        const mainNum = Math.floor(Math.random() * 8) + 3; // 3〜10まで対応
-        let leftNum = Math.floor(Math.random() * (mainNum - 1)) + 1;
-        let rightNum = mainNum - leftNum;
+      main.textContent = total;
+      left.textContent = a;
 
-        document.getElementById('main-number').textContent = mainNum;
-        document.getElementById('left-number').textContent = leftNum;
-        document.getElementById('right-number').textContent = rightNum;
+      right.textContent = "";
+      right.dataset.answer = b;
+      right.style.background = "#b0bec5";
+    }
 
-        document.getElementById('right-cover').classList.remove('hidden');
+    right.addEventListener("click", () => {
+      right.textContent = right.dataset.answer;
+      right.style.background = "#fff";
     });
 
-    document.getElementById('right-cover').addEventListener('click', function() {
-        this.classList.add('hidden');
-    });
+    btn.addEventListener("click", newQuiz);
 
-    document.getElementById('toggle-table-btn').addEventListener('click', function() {
-        const table = document.getElementById('combination-table');
-        table.classList.toggle('hidden');
-    });
-</script>
+    newQuiz();
+  </script>
 
 </body>
 </html>

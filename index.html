@@ -10,7 +10,6 @@
       background: #d3d3d3;
       font-family: sans-serif;
 
-      /* 画面中央揃え */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -20,13 +19,11 @@
       margin: 0;
     }
 
-    /* 全体 */
     .split-area {
       position: relative;
       width: 260px;
     }
 
-    /* 数字の箱 */
     .number-box {
       width: 100px;
       height: 100px;
@@ -45,25 +42,21 @@
       z-index: 2;
     }
 
-    /* 上の数字 */
     .top {
       margin: 0 auto;
     }
 
-    /* 下の2つ */
     .bottom-row {
       display: flex;
       justify-content: space-between;
       margin-top: 60px;
     }
 
-    /* 右の隠しマス（？なし） */
     .hidden-box {
       background: #b0bec5;
       cursor: pointer;
     }
 
-    /* 分岐線 */
     .branch-line {
       position: absolute;
       top: 90px;
@@ -83,7 +76,6 @@
       transform: translateX(-1px) rotate(30deg);
     }
 
-    /* ボタン */
     button {
       margin-top: 30px;
       padding: 12px 24px;
@@ -100,21 +92,18 @@
 <body>
 
   <div class="split-area">
-    <!-- 上の数字 -->
     <div class="number-box top" id="main"></div>
 
-    <!-- 分岐線 -->
     <div class="branch-line left"></div>
     <div class="branch-line right"></div>
 
-    <!-- 下の数字 -->
     <div class="bottom-row">
       <div class="number-box" id="left"></div>
       <div class="number-box hidden-box" id="right"></div>
     </div>
   </div>
 
-  <button id="new">もういっかい</button>
+  <button id="new">あたらしいすうじ</button>
 
   <script>
     const main = document.getElementById("main");
@@ -122,10 +111,23 @@
     const right = document.getElementById("right");
     const btn = document.getElementById("new");
 
-    function newQuiz() {
-      const total = Math.floor(Math.random() * 8) + 3; // 3〜10
-      const a = Math.floor(Math.random() * (total - 1)) + 1;
-      const b = total - a;
+    // 直前の問題を保存
+    let lastQuestion = null;
+
+    function generateQuestion() {
+      let total, a, b, key;
+
+      do {
+        total = Math.floor(Math.random() * 8) + 3; // 3〜10
+        a = Math.floor(Math.random() * (total - 1)) + 1;
+        b = total - a;
+
+        // 問題の一意キー（順序も含める）
+        key = `${total}-${a}-${b}`;
+
+      } while (key === lastQuestion);
+
+      lastQuestion = key;
 
       main.textContent = total;
       left.textContent = a;
@@ -140,9 +142,9 @@
       right.style.background = "#fff";
     });
 
-    btn.addEventListener("click", newQuiz);
+    btn.addEventListener("click", generateQuestion);
 
-    newQuiz();
+    generateQuestion();
   </script>
 
 </body>
